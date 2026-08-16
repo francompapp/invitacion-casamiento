@@ -30,14 +30,20 @@
 
 .timeline-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 1.5rem;
+  cursor: grab;
   /* hide scrollbar visually */
   scrollbar-width: none;
 }
 
 .timeline-wrapper::-webkit-scrollbar {
   display: none;
+}
+
+.timeline-wrapper:active {
+  cursor: grabbing;
 }
 
 .timeline-track {
@@ -152,9 +158,13 @@
   .timeline-wrapper {
     overflow-x: auto;
     overflow-y: hidden;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x;
+    width: calc(100% + 30px);
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 0 15px 1.2rem;
   }
 
   .timeline-track {
@@ -179,4 +189,19 @@
   .timeline-event-title {
     font-size: 1.25rem;
   }
+
+  .timeline-scroll-hint {
+    display: block;
+    margin-top: -0.4rem;
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--color-text-soft);
+    opacity: 0.9;
+  }
+}
+
+.timeline-scroll-hint {
+  display: none;
 }

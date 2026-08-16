@@ -78,6 +78,7 @@ const Schedule = () => {
             ))}
           </div>
         </div>
+        <p className="timeline-scroll-hint">Desliza para ver todo el horario →</p>
       </div>
     </section>
   );
