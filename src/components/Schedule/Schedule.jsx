@@ -54,31 +54,48 @@ const Schedule = () => {
         >
           <p className="schedule-label">EL GRAN DÍA</p>
           <h2 className="schedule-title">10.10.2026</h2>
+          <p className="schedule-subtitle">Un día pensado para ir fluyendo de un momento bonito al siguiente.</p>
         </motion.div>
 
-        <div className="timeline-wrapper">
-          <div className="timeline-track">
-            {SCHEDULE.map((item, index) => (
-              <motion.div
-                key={item.time}
-                className={`timeline-item${item.featured ? ' featured' : ''}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                viewport={{ once: true }}
-              >
-                <div className="timeline-dot" />
-                <div className="timeline-card">
-                  <p className="timeline-time">{item.time}</p>
-                  <h3 className="timeline-event-title">{item.title}</h3>
-                  <p className="timeline-desc">{item.description}</p>
-                  {item.note && <p className="timeline-note">{item.note}</p>}
-                </div>
-              </motion.div>
-            ))}
+        <div className="timeline-shell">
+          <span className="timeline-rail" />
+
+          <div className="timeline-list">
+            {SCHEDULE.map((item, index) => {
+              const sideClass = index % 2 === 0 ? 'left' : 'right';
+              return (
+                <motion.div
+                  key={item.time}
+                  className={`timeline-row ${sideClass}${item.featured ? ' featured' : ''}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: index * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="timeline-column timeline-column-empty" />
+
+                  <div className="timeline-column timeline-column-center">
+                    <div className="timeline-node">
+                      <span className="timeline-node-dot" />
+                    </div>
+                  </div>
+
+                  <div className="timeline-column timeline-column-card">
+                    <div className="timeline-card">
+                      <div className="timeline-card-top">
+                        <p className="timeline-time">{item.time}</p>
+                        <span className="timeline-chip">{index + 1}</span>
+                      </div>
+                      <h3 className="timeline-event-title">{item.title}</h3>
+                      <p className="timeline-desc">{item.description}</p>
+                      {item.note && <p className="timeline-note">{item.note}</p>}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
-        <p className="timeline-scroll-hint">Desliza para ver todo el horario →</p>
       </div>
     </section>
   );
