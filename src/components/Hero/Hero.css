@@ -239,6 +239,10 @@
 }
 
 @media (max-width: 768px) {
+  .hero::before {
+    background-image: url('/hero-bg-mobile.jpg');
+  }
+
   .hero-content {
     padding: 5.2rem 1rem 3rem;
   }
