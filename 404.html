@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages SPA redirect for project pages (branch deployment)
+      // repo segment count: /invitacion-casamiento -> 1
+      var segmentCount = 1;
+      var l = window.location;
+      var redirectPath =
+        l.protocol +
+        '//' +
+        l.hostname +
+        (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') +
+        '/?/' +
+        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash;
+
+      l.replace(redirectPath);
+    </script>
+  </head>
+  <body></body>
+</html>
