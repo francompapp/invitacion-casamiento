@@ -1,5 +1,21 @@
 const cache = new Map();
 
+const fetchWithTimeout = async (url, options = {}, timeoutMs = 8000) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+};
+
+const getSourceUrls = () => {
+  const proxyUrl = (import.meta.env.VITE_GUESTS_PROXY_URL || '').trim();
+  const sheetUrl = (import.meta.env.VITE_GUESTS_SHEET_CSV_URL || '').trim();
+  return [proxyUrl, sheetUrl].filter(Boolean);
+};
+
 const normalizeHeader = (value = '') =>
   value
     .toString()
@@ -96,25 +112,38 @@ const normalizeGuestRow = (row) => {
 };
 
 export const fetchGuestGroupByToken = async (token) => {
-  const scriptUrl = import.meta.env.VITE_GUESTS_SHEET_CSV_URL;
-  if (!scriptUrl) throw new Error('Falta VITE_GUESTS_SHEET_CSV_URL en .env');
+  const sourceUrls = getSourceUrls();
+  if (sourceUrls.length === 0) {
+    throw new Error('Falta VITE_GUESTS_PROXY_URL o VITE_GUESTS_SHEET_CSV_URL en .env');
+  }
 
   const normalizedToken = token.trim().toLowerCase();
   if (cache.has(normalizedToken)) return cache.get(normalizedToken);
 
-  const url = scriptUrl + '?token=' + encodeURIComponent(normalizedToken);
-  const response = await fetch(url);
-  if (!response.ok) throw new Error('Error al contactar el sheet');
+  for (const baseUrl of sourceUrls) {
+    try {
+      const url = baseUrl + '?token=' + encodeURIComponent(normalizedToken);
+      const response = await fetchWithTimeout(url, {}, 8000);
+      if (!response.ok) continue;
 
-  const data = await response.json();
-  if (data.error) {
-    cache.set(normalizedToken, null);
-    return null;
+      const raw = await response.text();
+      if (!raw?.trim()) continue;
+
+      const data = JSON.parse(raw);
+      if (data.error) {
+        cache.set(normalizedToken, null);
+        return null;
+      }
+
+      const guestGroup = normalizeGuestRow(data);
+      cache.set(normalizedToken, guestGroup);
+      return guestGroup;
+    } catch {
+      // Try next source (proxy -> direct script)
+    }
   }
 
-  const guestGroup = normalizeGuestRow(data);
-  cache.set(normalizedToken, guestGroup);
-  return guestGroup;
+  throw new Error('Error al contactar el sheet');
 };
 
 // Format dietary selection as a string to store in "Menu Detalle" column
@@ -134,19 +163,49 @@ export const formatMenuDetail = (attending, options = ['ninguna'], otras = '') =
 // Submit RSVP responses to the Google Sheet via Apps Script POST
 export const submitRSVP = async (token, responses) => {
   // responses: [{ slot: 0|1|2|3|4, menuDetail: string }]
-  const scriptUrl = import.meta.env.VITE_GUESTS_SHEET_CSV_URL;
-  if (!scriptUrl) throw new Error('Falta VITE_GUESTS_SHEET_CSV_URL en .env');
+  const proxyUrl = (import.meta.env.VITE_GUESTS_PROXY_URL || '').trim();
+  const scriptUrl = (import.meta.env.VITE_GUESTS_SHEET_CSV_URL || '').trim();
+  if (!proxyUrl && !scriptUrl) {
+    throw new Error('Falta VITE_GUESTS_PROXY_URL o VITE_GUESTS_SHEET_CSV_URL en .env');
+  }
 
-  // Apps Script POST requires no-cors (CORS headers not returned on POST).
-  // We can't read the response, so we optimistically assume success.
-  await fetch(scriptUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify({ action: 'submitRSVP', token, responses }),
-  });
+  const body = JSON.stringify({ action: 'submitRSVP', token, responses });
 
-  // Invalidate cache so next load gets fresh data
-  cache.delete(token.trim().toLowerCase());
+  // Prefer proxy first (better compatibility with Safari privacy protections)
+  if (proxyUrl) {
+    try {
+      const res = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body,
+      }, 7000);
+      if (!res.ok) throw new Error('Proxy error');
+
+      const raw = await res.text();
+      if (raw?.trim()) {
+        const data = JSON.parse(raw);
+        if (data?.error) throw new Error(data.error);
+      }
+
+      cache.delete(token.trim().toLowerCase());
+      return;
+    } catch {
+      // Fallback to direct Apps Script below
+    }
+  }
+
+  if (scriptUrl) {
+    // Direct Apps Script POST may require no-cors in browsers.
+    await fetchWithTimeout(scriptUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body,
+    }, 10000);
+    cache.delete(token.trim().toLowerCase());
+    return;
+  }
+
+  throw new Error('No se pudo guardar la confirmación');
 };
 
