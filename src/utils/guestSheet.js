@@ -174,7 +174,7 @@ export const submitRSVP = async (token, responses) => {
   // Prefer proxy first (better compatibility with Safari privacy protections)
   if (proxyUrl) {
     try {
-      const res = await fetch(proxyUrl, {
+      const res = await fetchWithTimeout(proxyUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body,
