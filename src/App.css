@@ -1,0 +1,45 @@
+.App {
+  min-height: 100vh;
+  width: 100%;
+}
+
+section {
+  padding: 80px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-text-soft);
+  gap: 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 60px 0;
+  }
+}

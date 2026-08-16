@@ -1,0 +1,75 @@
+:root {
+  /* ── Luxury Wedding Palette ── */
+  --color-primary:      #7A6652;   /* Warm taupe — main interactive */
+  --color-secondary:    #A8927A;   /* Sandy stone — secondary */
+  --color-accent:       #F5F0E8;   /* Warm ivory — section bg */
+  --color-accent-warm:  #C9A96E;   /* Antique gold — highlights */
+  --color-dark:         #3A2F26;   /* Deep warm espresso */
+  --color-text:         #2A2218;   /* Near-black warm */
+  --color-text-soft:    #7A6E64;   /* Warm grey — secondary text */
+  --color-bg:           #FDFAF6;   /* Warm off-white */
+  --color-card:         #FFFFFF;
+  --color-border:       rgba(122, 102, 82, 0.14);
+  --color-shadow:       rgba(42, 34, 24, 0.07);
+  --font-display: 'Great Vibes', cursive;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+}
