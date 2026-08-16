@@ -1,7 +1,8 @@
 .schedule {
   background: var(--color-accent);
   padding: 100px 0;
-  overflow: visible;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .schedule-header {
@@ -38,6 +39,7 @@
   padding-bottom: 1.5rem;
   cursor: grab;
   overscroll-behavior-x: contain;
+  scroll-padding-left: 0;
   /* hide scrollbar visually */
   scrollbar-width: thin;
 }
@@ -56,13 +58,12 @@
 }
 
 .timeline-track {
-  display: inline-flex;
+  display: flex;
   flex-direction: row;
-  gap: 0;
+  gap: 0.75rem;
   position: relative;
-  width: max-content;
   min-width: max-content;
-  padding: 0 2rem;
+  padding: 0;
 }
 
 /* Horizontal connecting line */
@@ -70,8 +71,8 @@
   content: '';
   position: absolute;
   top: 18px; /* aligns with dot center */
-  left: 2rem;
-  right: 2rem;
+  left: 0;
+  right: 0;
   height: 1px;
   background: var(--color-border);
   z-index: 0;
@@ -174,20 +175,21 @@
     width: 100%;
     margin: 0;
     padding: 0 0 1.2rem;
+    scroll-padding-left: 0;
   }
 
   .timeline-track {
-    min-width: 1020px;
-    padding: 0 1rem;
+    min-width: max-content;
+    padding: 0;
   }
 
   .timeline-track::before {
-    left: 0.9rem;
-    right: 0.9rem;
+    left: 0;
+    right: 0;
   }
 
   .timeline-item {
-    width: 158px;
+    width: 162px;
     scroll-snap-align: start;
   }
 
