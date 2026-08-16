@@ -167,34 +167,39 @@
 
 @media (max-width: 768px) {
   .timeline-wrapper {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    overflow: visible;
     width: 100%;
     margin: 0;
-    padding: 0 0 1.2rem;
-    scroll-padding-left: 0;
+    padding: 0;
+    cursor: default;
   }
 
   .timeline-track {
-    min-width: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+    width: 100%;
     padding: 0;
   }
 
   .timeline-track::before {
-    left: 0;
-    right: 0;
+    display: none;
   }
 
   .timeline-item {
-    width: 162px;
-    scroll-snap-align: start;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .timeline-dot {
+    display: none;
   }
 
   .timeline-card {
-    padding: 1.1rem 0.85rem;
+    width: 100%;
+    padding: 1.15rem 0.95rem;
+    text-align: left;
   }
 
   .timeline-event-title {
@@ -202,14 +207,7 @@
   }
 
   .timeline-scroll-hint {
-    display: block;
-    margin-top: -0.4rem;
-    text-align: center;
-    font-size: 0.68rem;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: var(--color-text-soft);
-    opacity: 0.9;
+    display: none;
   }
 }
 
