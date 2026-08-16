@@ -1,7 +1,7 @@
 .schedule {
   background: var(--color-accent);
   padding: 100px 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .schedule-header {
@@ -29,17 +29,26 @@
 /* ── Horizontal timeline ── */
 
 .timeline-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: block;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 1.5rem;
   cursor: grab;
+  overscroll-behavior-x: contain;
   /* hide scrollbar visually */
-  scrollbar-width: none;
+  scrollbar-width: thin;
 }
 
 .timeline-wrapper::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+
+.timeline-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(122, 102, 82, 0.35);
+  border-radius: 999px;
 }
 
 .timeline-wrapper:active {
@@ -47,10 +56,11 @@
 }
 
 .timeline-track {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   gap: 0;
   position: relative;
+  width: max-content;
   min-width: max-content;
   padding: 0 2rem;
 }
@@ -161,15 +171,14 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x;
-    width: calc(100% + 30px);
-    margin-left: -15px;
-    margin-right: -15px;
-    padding: 0 15px 1.2rem;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 1.2rem;
   }
 
   .timeline-track {
-    min-width: 980px;
-    padding: 0 0.9rem;
+    min-width: 1020px;
+    padding: 0 1rem;
   }
 
   .timeline-track::before {
