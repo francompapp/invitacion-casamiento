@@ -17,6 +17,13 @@
   box-shadow: 0 1px 0 var(--color-border);
 }
 
+.navigation.menu-open {
+  background: rgba(253, 250, 246, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
 .nav-container {
   display: flex;
   justify-content: space-between;
@@ -32,6 +39,10 @@
 }
 
 .navigation.scrolled .nav-logo h2 {
+  color: var(--color-primary);
+}
+
+.navigation.menu-open .nav-logo h2 {
   color: var(--color-primary);
 }
 
@@ -112,6 +123,10 @@
   background: var(--color-primary);
 }
 
+.navigation.menu-open .mobile-menu-toggle span {
+  background: var(--color-primary);
+}
+
 @media (max-width: 900px) {
   .nav-logo h2 {
     font-size: 1.5rem;
@@ -141,5 +156,11 @@
 
   .nav-menu li a {
     font-size: 1.05rem;
+    color: var(--color-text-soft);
+  }
+
+  .nav-cta {
+    border-color: var(--color-border) !important;
+    color: var(--color-primary) !important;
   }
 }
