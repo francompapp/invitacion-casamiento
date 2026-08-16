@@ -53,6 +53,11 @@ function TokenPage() {
   return <InvitationPage token={token} />;
 }
 
+function HomePage() {
+  const queryToken = new URLSearchParams(window.location.search).get('token');
+  return <InvitationPage token={queryToken} />;
+}
+
 function App() {
   return (
     <Router basename={import.meta.env.BASE_URL}>
@@ -60,7 +65,7 @@ function App() {
         <Navigation />
         <Routes>
           <Route path="/:token" element={<TokenPage />} />
-          <Route path="/" element={<InvitationPage token={null} />} />
+          <Route path="/" element={<HomePage />} />
         </Routes>
         <Footer />
       </div>
